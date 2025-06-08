@@ -1,19 +1,20 @@
 package components;
 
+import core.Vector;
+
 import java.awt.*;
+
 
 public abstract class Component {
 
-    private int x;
-    private int y;
+    private Vector vector;
     private int width;
     private int height;
     private ActionInterface actionInterface;
     private Position position;
 
     public Component(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+        vector = new Vector(x, y);
         this.width = width;
         this.height = height;
     }
@@ -29,23 +30,15 @@ public abstract class Component {
     }
 
     public boolean contains(int x, int y) {
-        return new Rectangle(this.x, this.y, width, height).contains(x, y);
+        return new Rectangle((int) vector.getX(), (int) vector.getY(), width, height).contains(x, y);
     }
 
-    public int getX() {
-        return x;
+    public Vector getVector() {
+        return vector;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public void setVector(Vector vector) {
+        this.vector = vector;
     }
 
     public int getWidth() {
@@ -80,8 +73,6 @@ public abstract class Component {
         this.position = position;
     }
 
-    private enum Position {
-        LEFT, RIGHT, CENTER, TOP, DOWN
-    }
+    public enum Position {LEFT, RIGHT, CENTER, TOP, DOWN}
 
 }

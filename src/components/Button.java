@@ -7,11 +7,14 @@ import java.awt.image.BufferedImage;
 
 public class Button extends Component {
 
-    private BufferedImage bf1, bf2, bf3;
+    private final BufferedImage bf1;
+    private BufferedImage bf2;
+    private BufferedImage bf3;
     private Type type;
     private boolean MIB; // mouse in button
     private boolean MLB; // mouse left button
     private boolean alreadyClicked = false;
+    private Label label;
 
     public Button(int x, int y, BufferedImage bf1) {
         super(x, y, bf1.getWidth(), bf1.getHeight());
@@ -31,7 +34,7 @@ public class Button extends Component {
         this.bf1 = bf1;
         this.bf2 = bf2;
         this.bf3 = bf3;
-        type = type.THREE_IMAGE;
+        type = Type.THREE_IMAGE;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class Button extends Component {
     @Override
     public void render(Graphics2D g) {
         BufferedImage bf = imageRender();
-        g.drawImage(bf, getX(), getY(), null);
+        g.drawImage(bf, (int) getVector().getX(), (int) getVector().getY(), null);
     }
 
     private BufferedImage imageRender() {
@@ -77,6 +80,11 @@ public class Button extends Component {
             }
             default -> bf1;
         };
+    }
+
+    public void setText(String text, Font font) {
+        label = new Label((int) getVector().getX(), (int) getVector().getY(), text, font);
+        label.setPosition(Position.CENTER);
     }
 
     private enum Type {

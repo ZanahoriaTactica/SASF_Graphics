@@ -27,7 +27,7 @@ public class Label extends Component {
         g.setColor(color);
         g.setFont(font);
 
-        g.drawString(text, getX(), getY());
+        g.drawString(text, (int) getVector().getX(), (int) getVector().getY());
     }
 
     public void serText(String text) {

@@ -1,0 +1,59 @@
+package core;
+
+public class Vector {
+
+    private double x = 0;
+    private double y = 0;
+
+    public Vector(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void add(Vector vector) {
+        x += vector.getX();
+        y += vector.getY();
+    }
+
+    public double getModule() {
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+    public void multiply(double scalar) {
+        x *= scalar;
+        y *= scalar;
+    }
+
+    public void div(double scalar) {
+        if (scalar != 0) {
+            x /= scalar;
+            y /= scalar;
+        }
+    }
+
+    public void normalice() {
+        double module = getModule();
+        x /= module;
+        y /= module;
+    }
+
+    public double getDistances(Vector vector) {
+        return Math.sqrt(Math.pow(x - vector.getX(), 2) + Math.pow(y - vector.getY(), 2));
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+}
