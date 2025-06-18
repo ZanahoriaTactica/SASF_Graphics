@@ -11,33 +11,35 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        x += vector.getX();
-        y += vector.getY();
+        this.x += vector.getX();
+        this.y += vector.getY();
     }
 
-    public double getModule() {
+    public double getMagnitude() {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public void multiply(double scalar) {
-        x *= scalar;
-        y *= scalar;
+        this.x *= scalar;
+        this.y *= scalar;
     }
 
-    public void div(double scalar) {
+    public void divide(double scalar) {
         if (scalar != 0) {
-            x /= scalar;
-            y /= scalar;
+            this.x /= scalar;
+            this.y /= scalar;
         }
     }
 
-    public void normalice() {
-        double module = getModule();
-        x /= module;
-        y /= module;
+    public void normalize() {
+        double magnitude = getMagnitude();
+        if (magnitude != 0) {
+            this.x /= magnitude;
+            this.y /= magnitude;
+        }
     }
 
-    public double getDistances(Vector vector) {
+    public double getDistance(Vector vector) {
         return Math.sqrt(Math.pow(x - vector.getX(), 2) + Math.pow(y - vector.getY(), 2));
     }
 
