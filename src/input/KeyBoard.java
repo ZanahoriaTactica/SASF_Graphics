@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 public class KeyBoard extends KeyAdapter {
 
-    private boolean[] keys = new boolean[256];
+    private final boolean[] keys = new boolean[256];
 
     private boolean isKeyPressed(int keyCode) {
         return keys[keyCode];

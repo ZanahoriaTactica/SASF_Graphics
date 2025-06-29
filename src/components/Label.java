@@ -1,6 +1,6 @@
 package components;
 
-import core.Vector;
+import core.Vector2D;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -39,7 +39,7 @@ public class Label extends Component {
         g.setColor(textColor); // Usa textColor
         g.setFont(textFont);   // Usa textFont
 
-        Vector drawingCoordinates = getRenderDrawingCoordinates(); // Obtiene las coordenadas de dibujo ajustadas
+        Vector2D drawingCoordinates = getRenderDrawingCoordinates(); // Obtiene las coordenadas de dibujo ajustadas
 
         // Obtiene las métricas de la fuente para calcular el ascenso (ascent).
         // El ascenso es la distancia desde la línea base hasta la parte superior de la mayoría de los caracteres.

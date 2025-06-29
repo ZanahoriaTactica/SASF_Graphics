@@ -2,6 +2,7 @@ package core;
 
 import input.KeyBoard;
 import input.Mouse;
+import physics.PhysicsEngine;
 import scene.Scene;
 
 import javax.swing.*;
@@ -10,22 +11,20 @@ import java.awt.image.BufferStrategy;
 
 public class Core extends JFrame implements Runnable {
 
-    private Canvas canvas;
+    private final Canvas canvas;
+    private final int width;
+    private final int height;
+    private final double fps;
+    private final double TIME_MEDIUM_OF_ACTUALIZATION;
+    private final KeyBoard keyBoard;
+    private final Mouse mouse;
     private Thread thread;
     private BufferStrategy bs;
     private Graphics2D g2d;
-
-    private int width;
-    private int height;
-    private double fps;
-    private double TIME_MEDIUM_OF_ACTUALIZATION;
-
-    private KeyBoard keyBoard;
-    private Mouse mouse;
-
     private boolean running = false;
 
     private Scene scene;
+    private PhysicsEngine physicsEngine;
 
     public Core(int width, int height, double fps) {
         // Configuration of Core
@@ -48,8 +47,8 @@ public class Core extends JFrame implements Runnable {
         this.add(canvas);
     }
 
-    private void update() {
-        scene.update();
+    private void update(double deltaTime) {
+        scene.update(deltaTime);
     }
 
     private void render() {
@@ -73,13 +72,14 @@ public class Core extends JFrame implements Runnable {
     public void run() {
         long lastTime = System.nanoTime();
         double delta = 0;
+
         running = true;
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / TIME_MEDIUM_OF_ACTUALIZATION;
             lastTime = now;
             if (delta >= 1) {
-                update();
+                update(1 / fps);
                 render();
                 delta--;
             }
@@ -87,18 +87,20 @@ public class Core extends JFrame implements Runnable {
     }
 
     public void init() {
-        if (scene != null) {
+        if (scene != null && !running) {
             this.setVisible(true);
             (thread = new Thread(this)).start();
         }
     }
 
     public void stop() {
-        running = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (running) {
+            running = false;
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package components;
 
-import core.Vector;
+import core.Vector2D;
 import input.Mouse;
 
 import java.awt.*;
@@ -9,9 +9,9 @@ import java.awt.image.BufferedImage;
 public class Button extends Component {
 
     private final BufferedImage defaultImage;   // Imagen por defecto (bf1)
+    private final ButtonType buttonType;              // Tipo de botón (cuántas imágenes tiene para sus estados)
     private BufferedImage hoverImage;           // Imagen al pasar el ratón por encima (bf2)
     private BufferedImage clickImage;           // Imagen al hacer clic (bf3)
-    private ButtonType buttonType;              // Tipo de botón (cuántas imágenes tiene para sus estados)
     private boolean isMouseOverButton;          // true si el ratón está sobre el botón (anteriormente MIB)
     private boolean isLeftMouseButtonPressed;   // true si el botón izquierdo del ratón está presionado (anteriormente MLB)
     private boolean hasBeenClickedOrReleased;   // Evita múltiples acciones por un solo clic mantenido o suelta inicial
@@ -71,7 +71,7 @@ public class Button extends Component {
     @Override
     public void render(Graphics2D g) {
         BufferedImage imageToRender = getImageForCurrentState();
-        Vector drawingCoordinates = getRenderDrawingCoordinates(); // Usa el método de Component
+        Vector2D drawingCoordinates = getRenderDrawingCoordinates(); // Usa el método de Component
 
         g.drawImage(imageToRender, (int) drawingCoordinates.getX(), (int) drawingCoordinates.getY(), null);
 

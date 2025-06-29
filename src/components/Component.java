@@ -1,20 +1,20 @@
 package components;
 
-import core.Vector;
+import core.Vector2D;
 
 import java.awt.*;
 
 public abstract class Component {
 
     protected AnchorPoint renderAnchor; // El punto de anclaje para el renderizado visual de este componente.
-    private Vector position; // La posición lógica (x, y) superior izquierda del componente.
+    private Vector2D position; // La posición lógica (x, y) superior izquierda del componente.
     private int width;       // Ancho del componente.
     private int height;      // Alto del componente.
     private ActionInterface actionInterface; // Interfaz para la acción a ejecutar.
     private Component anchorComponent;     // Componente al que este componente está anclado.
 
     public Component(int x, int y, int width, int height) {
-        this.position = new Vector(x, y);
+        this.position = new Vector2D(x, y);
         this.width = width;
         this.height = height;
         this.renderAnchor = AnchorPoint.TOP_LEFT; // Por defecto, se dibuja desde la esquina superior izquierda.
@@ -47,11 +47,11 @@ public abstract class Component {
         ).contains(x, y);
     }
 
-    public Vector getPosition() {
+    public Vector2D getPosition() {
         return position;
     }
 
-    public void setPosition(Vector position) {
+    public void setPosition(Vector2D position) {
         this.position = position;
     }
 
@@ -96,7 +96,7 @@ public abstract class Component {
      *
      * @return Un Vector con las coordenadas (x, y) donde el componente debe ser dibujado.
      */
-    public Vector getRenderDrawingCoordinates() {
+    public Vector2D getRenderDrawingCoordinates() {
         double drawX = position.getX();
         double drawY = position.getY();
 
@@ -146,7 +146,7 @@ public abstract class Component {
                     break;
             }
         }
-        return new Vector(drawX, drawY);
+        return new Vector2D(drawX, drawY);
     }
 
     /**
