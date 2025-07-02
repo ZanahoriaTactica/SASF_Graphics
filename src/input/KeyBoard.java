@@ -3,21 +3,31 @@ package input;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Handles keyboard input by tracking key states.
+ */
 public class KeyBoard extends KeyAdapter {
 
     private final boolean[] keys = new boolean[256];
 
-    private boolean isKeyPressed(int keyCode) {
+    public boolean isKeyPressed(int keyCode) {
+        if (keyCode < 0 || keyCode >= keys.length) {
+            return false;
+        }
         return keys[keyCode];
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
+        if (e.getKeyCode() >= 0 && e.getKeyCode() < keys.length) {
+            keys[e.getKeyCode()] = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        keys[e.getKeyCode()] = false;
+        if (e.getKeyCode() >= 0 && e.getKeyCode() < keys.length) {
+            keys[e.getKeyCode()] = false;
+        }
     }
 }

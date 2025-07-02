@@ -2,67 +2,67 @@ package components;
 
 import core.Vector2D;
 import input.Mouse;
+import resource.DataLoad;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * A clickable button component with support for different states (default, hover, click).
+ */
 public class Button extends Component {
 
-    private final BufferedImage defaultImage;   // Imagen por defecto (bf1)
-    private final ButtonType buttonType;              // Tipo de botón (cuántas imágenes tiene para sus estados)
-    private BufferedImage hoverImage;           // Imagen al pasar el ratón por encima (bf2)
-    private BufferedImage clickImage;           // Imagen al hacer clic (bf3)
-    private boolean isMouseOverButton;          // true si el ratón está sobre el botón (anteriormente MIB)
-    private boolean isLeftMouseButtonPressed;   // true si el botón izquierdo del ratón está presionado (anteriormente MLB)
-    private boolean hasBeenClickedOrReleased;   // Evita múltiples acciones por un solo clic mantenido o suelta inicial
-    private Label buttonLabel;                  // El Label que contendrá el texto del botón.
+    private final BufferedImage defaultImage;
+    private final BufferedImage hoverImage;
+    private final BufferedImage clickImage;
+    private final ButtonType buttonType;
+    private boolean isHovered;
+    private boolean isPressed;
+    private boolean hasBeenClicked;
+    private Label buttonLabel;
 
-    // Constructor para botón con una imagen
-    public Button(int x, int y, BufferedImage defaultImage) {
-        super(x, y, defaultImage.getWidth(), defaultImage.getHeight());
-        this.defaultImage = defaultImage;
-        this.buttonType = ButtonType.ONE_IMAGE;
-    }
-
-    // Constructor para botón con dos imágenes (default, hover)
-    public Button(int x, int y, BufferedImage defaultImage, BufferedImage hoverImage) {
-        super(x, y, defaultImage.getWidth(), defaultImage.getHeight());
-        this.defaultImage = defaultImage;
-        this.hoverImage = hoverImage;
-        this.buttonType = ButtonType.TWO_IMAGE;
-    }
-
-    // Constructor para botón con tres imágenes (default, hover, click)
-    public Button(int x, int y, BufferedImage defaultImage, BufferedImage hoverImage, BufferedImage clickImage) {
+    private Button(int x, int y, BufferedImage defaultImage, BufferedImage hoverImage, BufferedImage clickImage, ButtonType buttonType) {
         super(x, y, defaultImage.getWidth(), defaultImage.getHeight());
         this.defaultImage = defaultImage;
         this.hoverImage = hoverImage;
         this.clickImage = clickImage;
-        this.buttonType = ButtonType.THREE_IMAGE;
+        this.buttonType = buttonType;
+    }
+
+    public Button(int x, int y) {
+        this(x, y, DataLoad.BUTTON_BLUE, null, null, ButtonType.ONE_IMAGE);
+    }
+
+    public Button(int x, int y, BufferedImage defaultImage) {
+        this(x, y, defaultImage, null, null, ButtonType.ONE_IMAGE);
+    }
+
+    public Button(int x, int y, BufferedImage defaultImage, BufferedImage hoverImage) {
+        this(x, y, defaultImage, hoverImage, null, ButtonType.TWO_IMAGE);
+    }
+
+    public Button(int x, int y, BufferedImage defaultImage, BufferedImage hoverImage, BufferedImage clickImage) {
+        this(x, y, defaultImage, hoverImage, clickImage, ButtonType.THREE_IMAGE);
     }
 
     @Override
     public void update() {
-        isLeftMouseButtonPressed = Mouse.isMLB();
-        isMouseOverButton = contains(Mouse.getX(), Mouse.getY());
+        isPressed = Mouse.isLeftButtonPressed();
+        isHovered = containsPoint(Mouse.getX(), Mouse.getY());
 
-        // Si el ratón sale del botón o se suelta el clic, restablece el estado para permitir un nuevo clic
-        if (!isMouseOverButton && isLeftMouseButtonPressed) {
-            hasBeenClickedOrReleased = true;
+        if (!isHovered && isPressed) {
+            hasBeenClicked = true;
         }
 
-        // Si el ratón está sobre el botón, se presiona el clic izquierdo y no se ha procesado ya
-        if (isMouseOverButton && isLeftMouseButtonPressed && !hasBeenClickedOrReleased) {
-            doAction(); // Ejecuta la acción del botón
-            hasBeenClickedOrReleased = true; // Marca como procesado para evitar clics repetidos
+        if (isHovered && isPressed && !hasBeenClicked) {
+            executeAction();
+            hasBeenClicked = true;
         }
 
-        // Cuando el botón del ratón se suelta, permite un nuevo ciclo de clic
-        if (!isLeftMouseButtonPressed) {
-            hasBeenClickedOrReleased = false;
+        if (!isPressed) {
+            hasBeenClicked = false;
         }
 
-        // Actualiza el label interno si existe
         if (buttonLabel != null) {
             buttonLabel.update();
         }
@@ -70,60 +70,36 @@ public class Button extends Component {
 
     @Override
     public void render(Graphics2D g) {
-        BufferedImage imageToRender = getImageForCurrentState();
-        Vector2D drawingCoordinates = getRenderDrawingCoordinates(); // Usa el método de Component
+        BufferedImage image = getImageForCurrentState();
+        Vector2D drawPosition = getRenderDrawingCoordinates();
+        g.drawImage(image, (int) drawPosition.getX(), (int) drawPosition.getY(), null);
 
-        g.drawImage(imageToRender, (int) drawingCoordinates.getX(), (int) drawingCoordinates.getY(), null);
-
-        // Renderiza el label interno si existe
         if (buttonLabel != null) {
             buttonLabel.render(g);
         }
     }
 
-    /**
-     * Determina la imagen a renderizar basada en el estado actual del botón
-     * (por defecto, hover, click).
-     *
-     * @return La BufferedImage correspondiente al estado actual.
-     */
     private BufferedImage getImageForCurrentState() {
-        return switch (buttonType) {
-            case ONE_IMAGE -> defaultImage;
-            case TWO_IMAGE -> {
-                yield (isMouseOverButton) ? hoverImage : defaultImage;
-            }
-            case THREE_IMAGE -> {
-                yield (isMouseOverButton && isLeftMouseButtonPressed) ? clickImage : (isMouseOverButton ? hoverImage : defaultImage);
-            }
-        };
+        if (buttonType == ButtonType.THREE_IMAGE && isHovered && isPressed) {
+            return clickImage;
+        }
+        if (buttonType != ButtonType.ONE_IMAGE && isHovered) {
+            return hoverImage;
+        }
+        return defaultImage;
     }
 
-    /**
-     * Establece el texto y la fuente para el botón, creando un Label interno si es necesario.
-     * El label se configurará para centrarse dentro del botón.
-     *
-     * @param text El texto a mostrar en el botón.
-     * @param font La fuente del texto.
-     */
     public void setText(String text, Font font) {
         if (buttonLabel == null) {
-            // Inicializa el Label con la misma posición base del botón.
-            // La posición relativa y el anclaje se manejan a continuación.
-            buttonLabel = new Label(
-                    (int) getPosition().getX(),
-                    (int) getPosition().getY(),
-                    text,
-                    font
-            );
-            buttonLabel.setAnchorComponent(this);       // Ancla el Label al botón
-            buttonLabel.setRenderAnchor(AnchorPoint.CENTER); // Centra el Label dentro del botón
+            buttonLabel = new Label((int) getX(), (int) getY(), text, font);
+            buttonLabel.setAnchorComponent(this);
+            buttonLabel.setRenderAnchor(AnchorPoint.CENTER);
+        } else {
+            buttonLabel.setText(text);
+            buttonLabel.setTextFont(font);
         }
-        buttonLabel.setText(text);
-        buttonLabel.setTextFont(font);
     }
 
-    // Tipos de botones basados en el número de imágenes para sus estados.
     private enum ButtonType {
         ONE_IMAGE,
         TWO_IMAGE,

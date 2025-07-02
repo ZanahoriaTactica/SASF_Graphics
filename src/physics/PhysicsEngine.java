@@ -3,39 +3,46 @@ package physics;
 import core.Vector2D;
 
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Manages physics simulation for game objects.
+ */
 public class PhysicsEngine {
-    private final ArrayList<GameObject> gameObjects;
-    private Vector2D gravityAceleration;
 
-    public PhysicsEngine(Vector2D gravityAceleration) {
-        this.gravityAceleration = gravityAceleration;
-        gameObjects = new ArrayList<>();
+    private final List<GameObject> gameObjects = new ArrayList<>();
+    private Vector2D gravityAcceleration;
+
+    public PhysicsEngine(Vector2D gravityAcceleration) {
+        this.gravityAcceleration = gravityAcceleration != null ? gravityAcceleration : new Vector2D(0, 0);
     }
 
     public void update(double deltaTime) {
         for (GameObject gameObject : gameObjects) {
-            gameObject.applyForce(Vector2D.multiply(gravityAceleration, gameObject.getMass()));
+            if (gameObject.getMass() > 0) {
+                gameObject.applyForce(Vector2D.multiply(gravityAcceleration, gameObject.getMass()));
+            }
             gameObject.update(deltaTime);
         }
     }
 
-    public ArrayList<GameObject> getGameObjects() {
-        return gameObjects;
+    public List<GameObject> getGameObjects() {
+        return new ArrayList<>(gameObjects);
     }
 
     public void addGameObject(GameObject gameObject) {
-        if (gameObject != null)
+        if (gameObject != null) {
             gameObjects.add(gameObject);
+        }
     }
 
     public void removeGameObject(GameObject gameObject) {
-        if (gameObject != null)
+        if (gameObject != null) {
             gameObjects.remove(gameObject);
+        }
     }
 
-    public void setGravityAceleration(Vector2D gravityAceleration) {
-        this.gravityAceleration = gravityAceleration;
+    public void setGravityAcceleration(Vector2D gravityAcceleration) {
+        this.gravityAcceleration = gravityAcceleration != null ? gravityAcceleration : new Vector2D(0, 0);
     }
 }
-

@@ -1,5 +1,8 @@
 package core;
 
+/**
+ * An immutable 2D vector with x and y coordinates.
+ */
 public class Vector2D {
 
     private final double x;
@@ -10,36 +13,52 @@ public class Vector2D {
         this.y = y;
     }
 
-    public static Vector2D add(Vector2D v2, Vector2D v1) {
+    public static Vector2D add(Vector2D v1, Vector2D v2) {
+        if (v1 == null || v2 == null) {
+            throw new IllegalArgumentException("Vectors cannot be null");
+        }
         return new Vector2D(v1.x + v2.x, v1.y + v2.y);
     }
 
     public static Vector2D multiply(Vector2D v, double scalar) {
-        if (v == null) return null;
+        if (v == null) {
+            throw new IllegalArgumentException("Vector cannot be null");
+        }
         return new Vector2D(v.x * scalar, v.y * scalar);
     }
 
     public static Vector2D divide(Vector2D v, double scalar) {
-        if (v == null) return null;
-        if (scalar != 0) {
-            return new Vector2D(v.x / scalar, v.y / scalar);
+        if (v == null) {
+            throw new IllegalArgumentException("Vector cannot be null");
         }
-        return v;
+        if (scalar == 0) {
+            throw new IllegalArgumentException("Cannot divide by zero");
+        }
+        return new Vector2D(v.x / scalar, v.y / scalar);
     }
 
     public static double getMagnitude(Vector2D v) {
+        if (v == null) {
+            throw new IllegalArgumentException("Vector cannot be null");
+        }
         return Math.sqrt(v.x * v.x + v.y * v.y);
     }
 
     public static Vector2D normalize(Vector2D v) {
-        double magnitude = getMagnitude(v);
-        if (magnitude != 0) {
-            return new Vector2D(v.x / magnitude, v.y / magnitude);
+        if (v == null) {
+            throw new IllegalArgumentException("Vector cannot be null");
         }
-        return v;
+        double magnitude = getMagnitude(v);
+        if (magnitude == 0) {
+            return new Vector2D(0, 0);
+        }
+        return new Vector2D(v.x / magnitude, v.y / magnitude);
     }
 
     public static double getDistance(Vector2D v1, Vector2D v2) {
+        if (v1 == null || v2 == null) {
+            throw new IllegalArgumentException("Vectors cannot be null");
+        }
         return Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
     }
 
