@@ -2,15 +2,21 @@ package physics;
 
 import core.Vector2D;
 
-/**
- * Represents a dynamic object with mass, position, velocity, and acceleration.
- */
 public class DynamicObject {
 
+
     private final double mass;
+
+
     private Vector2D position;
+
+
     private Vector2D velocity;
+
+
     private Vector2D acceleration;
+
+
     private Vector2D accumulatedForce;
 
     public DynamicObject(Vector2D position, double mass) {
@@ -22,13 +28,29 @@ public class DynamicObject {
     }
 
     public void update(double deltaTime) {
+        updateAcceleration();
+        updateVelocity(deltaTime);
+        updatePosition(deltaTime);
+        resetForce();
+    }
+
+    private void updateAcceleration() {
         if (mass > 0) {
             acceleration = Vector2D.divide(accumulatedForce, mass);
         } else {
             acceleration = new Vector2D(0, 0);
         }
+    }
+
+    private void updateVelocity(double deltaTime) {
         velocity = Vector2D.add(velocity, Vector2D.multiply(acceleration, deltaTime));
+    }
+
+    private void updatePosition(double deltaTime) {
         position = Vector2D.add(position, Vector2D.multiply(velocity, deltaTime));
+    }
+
+    private void resetForce() {
         accumulatedForce = new Vector2D(0, 0);
     }
 
@@ -47,30 +69,38 @@ public class DynamicObject {
     }
 
     public void setPosition(Vector2D position) {
-        this.position = position;
-    }
-
-    public void setVelocity(Vector2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public void setAcceleration(Vector2D acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setAccumulatedForce(Vector2D accumulatedForce) {
-        this.accumulatedForce = accumulatedForce;
+        if (position != null) {
+            this.position = position;
+        }
     }
 
     public Vector2D getVelocity() {
         return velocity;
     }
 
+    public void setVelocity(Vector2D velocity) {
+        if (velocity != null) {
+            this.velocity = velocity;
+        }
+    }
+
     public Vector2D getAcceleration() {
         return acceleration;
     }
 
+    public void setAcceleration(Vector2D acceleration) {
+        if (acceleration != null) {
+            this.acceleration = acceleration;
+        }
+    }
+
     public Vector2D getAccumulatedForce() {
         return accumulatedForce;
+    }
+
+    public void setAccumulatedForce(Vector2D accumulatedForce) {
+        if (accumulatedForce != null) {
+            this.accumulatedForce = accumulatedForce;
+        }
     }
 }

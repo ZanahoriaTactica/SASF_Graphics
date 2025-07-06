@@ -9,23 +9,45 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-/**
- * The core game engine, managing the game loop and rendering.
- */
 public class Core extends JFrame implements Runnable {
 
+
+    public static Mouse mouse;
+
+
     private final int width;
+
+
     private final int height;
+
+
     private final double fps;
+
+
     private final double NS_PER_FRAME;
+
+
     private final KeyBoard keyboard;
-    private final Mouse mouse;
+
+
     private Canvas canvas;
+
+
     private Thread thread;
+
+
     private BufferStrategy bufferStrategy;
+
+
     private Graphics2D graphics;
+
+
     private boolean running = false;
+
+
     private Scene scene;
+
+
     private PhysicsEngine physicsEngine;
 
     public Core(int width, int height, double fps) {
@@ -34,7 +56,7 @@ public class Core extends JFrame implements Runnable {
         this.fps = fps;
         this.NS_PER_FRAME = 1_000_000_000.0 / fps;
         this.keyboard = new KeyBoard();
-        this.mouse = new Mouse();
+        mouse = new Mouse();
         initializeWindow();
         initializeCanvas();
     }

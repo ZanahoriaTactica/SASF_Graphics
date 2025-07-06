@@ -7,12 +7,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Manages a collection of components and game objects for rendering and updating.
- */
 public class Scene {
 
+
     private final List<Component> components = new ArrayList<>();
+
+
     private final PhysicsEngine physicsEngine;
 
     public Scene(PhysicsEngine physicsEngine) {
@@ -20,16 +20,30 @@ public class Scene {
     }
 
     public void update(double deltaTime) {
+
         components.forEach(Component::update);
+
+
         if (physicsEngine != null) {
             physicsEngine.update(deltaTime);
         }
     }
 
     public void render(Graphics2D g) {
+        if (g == null) {
+            throw new NullPointerException("Graphics context cannot be null");
+        }
+
+
         components.forEach(component -> component.render(g));
+
+
         if (physicsEngine != null) {
-            physicsEngine.getGameObjects().forEach(gameObject -> gameObject.render(g));
+            physicsEngine.getGameObjects().forEach(gameObject -> {
+                if (gameObject != null) {
+                    gameObject.render(g);
+                }
+            });
         }
     }
 

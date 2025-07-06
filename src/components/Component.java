@@ -4,20 +4,24 @@ import core.Vector2D;
 
 import java.awt.*;
 
-/**
- * Abstract base class for UI components with position, size, and rendering capabilities.
- */
 public abstract class Component {
 
-    private Vector2D position;
-    private int width;
-    private int height;
     protected AnchorPoint renderAnchor;
+
+    private Vector2D position;
+
+    private int width;
+
+    private int height;
+
     private Action action;
     private Component anchorComponent;
 
-    public Component(int x, int y, int width, int height) {
-        this.position = new Vector2D(x, y);
+    public Component(Vector2D position, int width, int height) {
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Width and height must be non-negative");
+        }
+        this.position = position != null ? position : new Vector2D(0, 0);
         this.width = width;
         this.height = height;
         this.renderAnchor = AnchorPoint.TOP_LEFT;
@@ -29,7 +33,7 @@ public abstract class Component {
 
     public void executeAction() {
         if (action != null) {
-            action.doAction();
+            action.execute();
         }
     }
 
@@ -54,15 +58,21 @@ public abstract class Component {
         return width;
     }
 
+    public void setWidth(int width) {
+        if (width < 0) {
+            throw new IllegalArgumentException("Width cannot be negative");
+        }
+        this.width = width;
+    }
+
     public int getHeight() {
         return height;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     public void setHeight(int height) {
+        if (height < 0) {
+            throw new IllegalArgumentException("Height cannot be negative");
+        }
         this.height = height;
     }
 
@@ -72,6 +82,10 @@ public abstract class Component {
 
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public Vector2D getPosition() {
+        return position;
     }
 
     public void setAnchorComponent(Component anchorComponent) {

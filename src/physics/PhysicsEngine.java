@@ -5,12 +5,12 @@ import core.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Manages physics simulation for game objects.
- */
 public class PhysicsEngine {
 
+
     private final List<GameObject> gameObjects = new ArrayList<>();
+
+
     private Vector2D gravityAcceleration;
 
     public PhysicsEngine(Vector2D gravityAcceleration) {

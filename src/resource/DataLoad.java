@@ -4,9 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-/**
- * Loads and provides access to game resources (images).
- */
 public final class DataLoad {
 
     public static final BufferedImage BALL = loadImage("ball1.png");

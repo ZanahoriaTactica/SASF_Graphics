@@ -6,9 +6,6 @@ import resource.DataLoad;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/**
- * A game object with a visual representation and physical properties.
- */
 public class GameObject extends DynamicObject {
 
     private final BufferedImage image;
@@ -18,23 +15,23 @@ public class GameObject extends DynamicObject {
         this.image = image != null ? image : DataLoad.BALL;
     }
 
-    public GameObject(int x, int y, double mass) {
-        this(new Vector2D(x, y), mass, DataLoad.BALL);
+    public GameObject(Vector2D position, double mass) {
+        this(position, mass, DataLoad.BALL);
     }
 
-    public GameObject(int x, int y) {
-        this(new Vector2D(x, y), 0, DataLoad.BALL);
+    public GameObject(Vector2D position) {
+        this(position, 0, DataLoad.BALL);
     }
 
-    public GameObject(int x, int y, BufferedImage image, double mass) {
-        this(new Vector2D(x, y), mass, image);
+    public GameObject(Vector2D position, BufferedImage image, double mass) {
+        this(position, mass, image);
     }
 
-    public GameObject(int x, int y, BufferedImage image) {
-        this(new Vector2D(x, y), 0, image);
+    public GameObject(Vector2D position, BufferedImage image) {
+        this(position, 0, image);
     }
 
     public void render(Graphics2D g) {
-        g.drawImage(image, (int) getPosition().getX(), (int) getPosition().getY(), null);
+        g.drawImage(image, (int) Math.round(getPosition().getX()), (int) Math.round(getPosition().getY()), null);
     }
 }

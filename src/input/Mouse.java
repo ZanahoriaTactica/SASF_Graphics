@@ -3,24 +3,26 @@ package input;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * Handles mouse input, tracking position and left button state.
- */
 public class Mouse extends MouseAdapter {
 
-    private static int x;
-    private static int y;
-    private static boolean leftButtonPressed;
 
-    public static int getX() {
+    private int x;
+
+
+    private int y;
+
+
+    private boolean leftButtonPressed;
+
+    public int getX() {
         return x;
     }
 
-    public static int getY() {
+    public int getY() {
         return y;
     }
 
-    public static boolean isLeftButtonPressed() {
+    public boolean isLeftButtonPressed() {
         return leftButtonPressed;
     }
 

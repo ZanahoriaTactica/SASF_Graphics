@@ -3,9 +3,6 @@ package input;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/**
- * Handles keyboard input by tracking key states.
- */
 public class KeyBoard extends KeyAdapter {
 
     private final boolean[] keys = new boolean[256];
